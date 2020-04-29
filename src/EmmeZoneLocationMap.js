@@ -26,8 +26,10 @@ import { create, all }  from 'mathjs';
 const config = { };
 const math = create(all, config);
 
+
 // Set your mapbox token here
 const MAPBOX_TOKEN = 'pk.eyJ1Ijoib3NrYXJiZyIsImEiOiJjazI0c29jbXQxOTFqM25ucjdybTZwZTNmIn0.nIJ6qTpnaA3xZIv5m5ievg'; // eslint-disable-line
+import mapStyle from './mapboxstyle';
 
 // Source data GeoJSON
 const DATA_URL =
@@ -35,8 +37,6 @@ const DATA_URL =
 
 //import emmedata from './emmeNoWaterEPSG4326.json';
 import emmedata from '../data/emmeNoWaterEPSG4326_simple.json';
-
-import waterdata from '../data/water.json';
 import tripsdata from '../data/trips_mode.json';
 //import tripsdata from './trips.json';
 
@@ -408,13 +408,7 @@ getActive = (alternatives) => {
     //console.log(d2-d1)
     return [
       // only needed when using shadows - a plane for shadows to drop on
-      new PolygonLayer({
-        id: 'ground',
-        data: landCover,
-        stroked: false,
-        getPolygon: f => f,
-        getFillColor: [255,255,255]
-      }),
+      
       new GeoJsonLayer({
         id: 'emme',
         data: emmedata,
@@ -433,21 +427,7 @@ getActive = (alternatives) => {
           getElevation : this.state.nUpdated,
           getFillColor : this.state.nUpdated
         }
-      }),
-      new GeoJsonLayer({
-        id: 'water',
-        data:waterdata,
-        opacity: 1,
-        stroked: false,
-        filled: true,
-        extruded: true,
-        wireframe: true,
-        getElevation: f => 2,
-        getFillColor: [190, 207, 232,110],
-        getLineColor: [255, 255, 255],
-        pickable: true,
-        onHover: this._onHover
-      }),
+      })
     ];
   }
 
@@ -485,7 +465,7 @@ getActive = (alternatives) => {
     return (
       <div>
         <Sidebar
-          height={this.state.sidebarOpen ? "600px" : "102px"}
+          height={this.state.sidebarOpen ? "500px" : "102px"}
         >
           <Section>
             <ActivityList
@@ -536,13 +516,12 @@ getActive = (alternatives) => {
           controller={true}
 
         >
-          {/* <StaticMap
-          reuseMaps
-          mapStyle={mapStyle}
-          preventStyleDiffing={true}
-          mapboxApiAccessToken={MAPBOX_TOKEN}
-        /> */}
-
+           <StaticMap
+                reuseMaps
+                mapStyle={mapStyle}
+                preventStyleDiffing={true}
+                mapboxApiAccessToken={MAPBOX_TOKEN}
+              />
           {this._renderTooltip}
         </DeckGL>
       </div>
